@@ -1,0 +1,14 @@
+<!-- Add this line in the <head> section of your home.html template -->
+<link rel="stylesheet" href="../css/conversation.css">
+
+<div class="conversation-container">
+    <div class="messages">
+        <!-- Sample messages. Replace with dynamic loading from your backend -->
+        <div class="message user-message">Hello, how can I help you?</div>
+        <div class="message bot-message">I have a question about my account.</div>
+    </div>
+    <form class="message-form" action="/send-message" method="POST">
+        <input type="text" name="message" placeholder="Type a message..." required>
+        <button type="submit">Send</button>
+    </form>
+</div>
