@@ -10,6 +10,7 @@ from starlette.staticfiles import StaticFiles
 
 from controller.user_controller import router as user_router
 from controller.conversation_controller import router as conversation_router
+from controller.message_controller import router as message_controller
 from model.conversation import Conversation
 from model.message import Message
 
@@ -30,6 +31,7 @@ root_router = APIRouter()
 
 app.include_router(user_router)
 app.include_router(conversation_router)
+app.include_router(message_controller)
 app.include_router(root_router)
 
 

@@ -4,7 +4,7 @@ from typing import Optional
 
 
 class JWTUtils:
-    SECRET_KEY = "ChatBox!"
+    SECRET_KEY = "PuzzleFasillari!"
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -20,9 +20,9 @@ class JWTUtils:
         return encoded_jwt
 
     @staticmethod
-    def verify_token(token: str, credentials_exception):
+    def verify_token(payload: dict, credentials_exception):
         try:
-            payload = jwt.decode(token, JWTUtils.SECRET_KEY, algorithms=[JWTUtils.ALGORITHM])
+            # payload = jwt.decode(token, JWTUtils.SECRET_KEY, algorithms=[JWTUtils.ALGORITHM])
             username: str = payload.get("sub")
             if username is None:
                 raise credentials_exception

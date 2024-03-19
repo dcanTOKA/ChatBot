@@ -10,13 +10,14 @@ from service.user_service import UserService
 from utils.custom_http import CustomHTTPBearer
 from utils.jwt import JWTUtils
 
+oauth2_scheme = CustomHTTPBearer()
+user_service = UserService()
+
 
 class AuthService(IAuthService):
-    oauth2_scheme = CustomHTTPBearer()
-    user_service = UserService()
 
     async def authenticate_user(self, user_data: UserLogin):
-        user = await self.user_service.login_user(user_data)
+        user = await user_service.login_user(user_data)
         if not user:
             return False
         return user
@@ -29,13 +30,13 @@ class AuthService(IAuthService):
         )
         return access_token
 
-    async def get_current_user(self, token: str = Depends(oauth2_scheme)):
+    async def get_current_user(self, payload: dict = Depends(oauth2_scheme)):
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"}
         )
-        username = JWTUtils.verify_token(token, credentials_exception)
+        username = JWTUtils.verify_token(payload, credentials_exception)
         user = await UserRepository.get_user_by_username(username)
         if user is None:
             raise credentials_exception
