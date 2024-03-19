@@ -42,7 +42,7 @@ async def login(form_data: UserLogin) -> Auth:
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = auth_service.create_token_for_user(user)
+    access_token = await auth_service.create_token_for_user(user)
 
     auth = Auth(access_token=access_token)
 

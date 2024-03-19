@@ -4,7 +4,7 @@ from typing import Optional
 
 
 class JWTUtils:
-    SECRET_KEY = "PuzzleFasillari!"
+    SECRET_KEY = "ChatBox!"
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

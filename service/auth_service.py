@@ -1,8 +1,7 @@
 from datetime import timedelta
 
-from fastapi import HTTPException, status, Cookie
+from fastapi import HTTPException, status
 from fastapi.params import Depends
-from starlette.requests import Request
 
 from model.user import UserLogin
 from repository.user_repository import UserRepository
@@ -22,10 +21,11 @@ class AuthService(IAuthService):
             return False
         return user
 
-    def create_token_for_user(self, user: UserLogin):
+    async def create_token_for_user(self, user: UserLogin):
         access_token_expires = timedelta(minutes=JWTUtils.ACCESS_TOKEN_EXPIRE_MINUTES)
+        user_ = await UserService.get_user_by_username(user.username)
         access_token = JWTUtils.create_access_token(
-            data={"sub": user.username}, expires_delta=access_token_expires
+            data={"sub": user.username, "sub_id": str(user_.id)}, expires_delta=access_token_expires
         )
         return access_token
 
