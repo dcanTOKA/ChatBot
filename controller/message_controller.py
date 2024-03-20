@@ -8,6 +8,8 @@ from model.message import Message
 from model.user import User
 from service.auth_service import AuthService
 from service.message_service import MessageService
+from utils.nlp.evaluate import evaluateInput
+from model.settings import settings
 
 router = APIRouter(prefix="/message", tags=['Message'])
 
@@ -28,6 +30,6 @@ async def websocket_endpoint(websocket: WebSocket, conversation_id: str):
     await websocket.accept()
     while True:
         data = await websocket.receive_text()
-        # Burada gelen mesajı işleyip, seq2seq veya LLM modeline gönderebilirsiniz.
-        await websocket.send_text(f"Mesajınız alındı: {data}")
+        res = evaluateInput(settings.searcher, settings.voc, data)
+        await websocket.send_text(res)
         # await message_service.create_message(...)
