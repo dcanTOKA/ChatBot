@@ -4,5 +4,4 @@
 *.http
 /.idea
 /.template
-/data
 /trained

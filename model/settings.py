@@ -12,6 +12,10 @@ from service.nlp.vocabulary_service import Vocabulary
 
 from decouple import config
 
+from utils.load_json import load_from_pickle
+
+DATA_PATH = "./data"
+
 
 class Settings:
     def __init__(self):
@@ -33,41 +37,14 @@ class Settings:
         self.searcher = None
 
     def load_vocabulary(self):
-        normalized_qa_pairs = []
-        qa_pairs = []
-
-        qa_file_path = os.path.join('./data', 'qa_pairs.txt')
-
-        with open(qa_file_path, 'r') as file:
-            qas = file.readlines()
-
-        for i, qa in enumerate(qas):
-            if i == len(qas) - 1:
-                break
-            pairs = qa.split("\t")
-            source = pairs[0]
-            target = pairs[1]
-
-            if source and target:
-                qa_pairs.append(QAPair(question=source, answer=target))
-
-        for i, qa in enumerate(qa_pairs):
-            source = normalize(qa.question)
-            target = normalize(qa.answer)
-
-            if (len(source.split()) < self.MAX_LEN and len(source) > 1) and (
-                    len(target.split()) < self.MAX_LEN and len(target) > 1):
-                normalized_qa_pairs.append(QAPair(question=source, answer=target))
 
         self.voc = Vocabulary("movie")
+        self.voc.num_word = 13149
+        self.voc.index2word = load_from_pickle(DATA_PATH+"/index2word.pkl")
+        self.voc.word2index = load_from_pickle(DATA_PATH + "/word2index.pkl")
+        self.voc.word2count = load_from_pickle(DATA_PATH + "/word2count.pkl")
 
-        for pair in normalized_qa_pairs:
-            self.voc.add_sentence(pair.question)
-            self.voc.add_sentence(pair.answer)
-
-        self.voc.trim(int(config("MIN_COUNT")))
-
-        self.output_size = 13149
+        self.output_size = self.voc.num_word
         self.embedding = nn.Embedding(num_embeddings=self.output_size, embedding_dim=self.hidden_size)
 
     def load_model(self):
