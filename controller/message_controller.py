@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 from beanie import PydanticObjectId
@@ -25,11 +26,14 @@ async def get_messages(conversation_id: PydanticObjectId, current_user: User = D
     return await message_service.get_messages_by_conversation_id(conversation_id)
 
 
-@router.websocket("/ws/{conversation_id}")
-async def websocket_endpoint(websocket: WebSocket, conversation_id: str):
+@router.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: str):
     await websocket.accept()
     while True:
-        data = await websocket.receive_text()
-        res = evaluateInput(settings.searcher, settings.voc, data)
+        data = await websocket.receive()
+        message = data["text"]
+        conv_id = data["conversationId"]
+        res = evaluateInput(settings.searcher, settings.voc, message)
         await websocket.send_text(res)
         # await message_service.create_message(...)
+        #
