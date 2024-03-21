@@ -30,7 +30,8 @@ async def get_messages(conversation_id: PydanticObjectId, current_user: User = D
 async def websocket_endpoint(websocket: WebSocket, user_id: str):
     await websocket.accept()
     while True:
-        data = await websocket.receive()
+        data = await websocket.receive_text()
+        data = json.loads(data)
         message = data["text"]
         conv_id = data["conversationId"]
         res = evaluateInput(settings.searcher, settings.voc, message)
