@@ -22,7 +22,7 @@ class IConversationService(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_conversations_by_user_id(self, user_id: PydanticObjectId) -> Optional[List[Conversation]]:
+    async def get_conversations_by_user_id(self, user_id: PydanticObjectId, page=0, page_size=10) -> Optional[List[Conversation]]:
         raise NotImplementedError
 
     @abstractmethod
