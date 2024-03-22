@@ -40,5 +40,5 @@ async def remove_message_from_conversation(conversation_id: PydanticObjectId, cu
 
 
 @router.get("/", response_model=List[Conversation])
-async def list_conversations(user_id: PydanticObjectId, current_user: User = Depends(auth_service.get_current_user)):
-    return await conversation_service.get_conversations_by_user_id(user_id)
+async def list_conversations(user_id: PydanticObjectId, page: int = 0, page_size: int = 10, current_user: User = Depends(auth_service.get_current_user)):
+    return await conversation_service.get_conversations_by_user_id(user_id, page, page_size)

@@ -25,7 +25,7 @@ class ConversationRepository(IConversationRepository):
         conversation = await Conversation.get(conversation_id)
         return conversation
 
-    async def get_conversations_by_user_id(self, user_id: PydanticObjectId, page: int, page_size: int) -> Optional[List[Conversation]]:
+    async def get_conversations_by_user_id(self, user_id: PydanticObjectId, page, page_size) -> Optional[List[Conversation]]:
         skip = (page - 1) * page_size
         conversations = await Conversation.find(Conversation.user_id == user_id).skip(skip).limit(page_size).to_list()
         return conversations
