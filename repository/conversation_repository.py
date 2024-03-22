@@ -25,11 +25,13 @@ class ConversationRepository(IConversationRepository):
         conversation = await Conversation.get(conversation_id)
         return conversation
 
-    async def get_conversations_by_user_id(self, user_id: PydanticObjectId) -> Optional[List[Conversation]]:
-        conversations = await Conversation.find(Conversation.user_id == user_id).to_list()
+    async def get_conversations_by_user_id(self, user_id: PydanticObjectId, page: int, page_size: int) -> Optional[List[Conversation]]:
+        skip = (page - 1) * page_size
+        conversations = await Conversation.find(Conversation.user_id == user_id).skip(skip).limit(page_size).to_list()
         return conversations
 
-    async def add_message_to_conversation(self, conversation_id: PydanticObjectId, message_id: PydanticObjectId) -> PydanticObjectId:
+    async def add_message_to_conversation(self, conversation_id: PydanticObjectId,
+                                          message_id: PydanticObjectId) -> PydanticObjectId:
         conversation = await Conversation.get(conversation_id)
         if conversation:
             conversation.message_ids.append(message_id)

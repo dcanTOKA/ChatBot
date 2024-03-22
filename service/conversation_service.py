@@ -20,10 +20,11 @@ class ConversationService(IConversationService):
         return await self.repository.create_conversation(conversation)
 
     async def add_message_to_conversation(self, add_message_input: AddMessage) -> PydanticObjectId:
-        return await self.repository.add_message_to_conversation(add_message_input.conversation_id, add_message_input.message_id)
+        return await self.repository.add_message_to_conversation(add_message_input.conversation_id,
+                                                                 add_message_input.message_id)
 
-    async def get_conversations_by_user_id(self, user_id: PydanticObjectId) -> Optional[List[Conversation]]:
-        return await self.repository.get_conversations_by_user_id(user_id)
+    async def get_conversations_by_user_id(self, user_id: PydanticObjectId, page=0, page_size=10) -> Optional[List[Conversation]]:
+        return await self.repository.get_conversations_by_user_id(user_id, page, page_size)
 
     async def delete_conversation(self, conversation_id: PydanticObjectId):
         return await self.repository.delete_conversation(conversation_id)

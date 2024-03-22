@@ -18,15 +18,14 @@ class IConversationRepository(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_conversations_by_user_id(self, user_id: PydanticObjectId) -> Optional[List[Conversation]]:
+    async def get_conversations_by_user_id(self, user_id: PydanticObjectId, page: int, page_size: int) -> Optional[List[Conversation]]:
         raise NotImplementedError
 
     @abstractmethod
-    async def add_message_to_conversation(self, conversation_id: PydanticObjectId, message_id: PydanticObjectId) -> PydanticObjectId:
+    async def add_message_to_conversation(self, conversation_id: PydanticObjectId,
+                                          message_id: PydanticObjectId) -> PydanticObjectId:
         raise NotImplementedError
 
     @abstractmethod
     async def delete_conversation(self, conversation_id: PydanticObjectId):
         raise NotImplementedError
-
-
